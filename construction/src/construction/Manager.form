@@ -49,7 +49,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="183" max="-2" attributes="0"/>
                   <Component id="jTextField13" min="-2" pref="306" max="-2" attributes="0"/>
-                  <EmptySpace pref="482" max="32767" attributes="0"/>
+                  <EmptySpace pref="485" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -436,6 +436,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="WORKER"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton37ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton38">
           <Properties>
@@ -446,21 +449,33 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="SITE MANAGER"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton39ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton40">
           <Properties>
-            <Property name="text" type="java.lang.String" value="APPROVE MATERIAL"/>
+            <Property name="text" type="java.lang.String" value="REQUESTED MATERIAL"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton40ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton41">
           <Properties>
             <Property name="text" type="java.lang.String" value="APPROVE MATERIAL"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton41ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton42">
           <Properties>
             <Property name="text" type="java.lang.String" value="BUDGET"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton42ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
@@ -499,16 +514,25 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="VIEW ATTENDANCE"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton43ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton44">
           <Properties>
             <Property name="text" type="java.lang.String" value="TRACK PROGRESS"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton44ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton45">
           <Properties>
             <Property name="text" type="java.lang.String" value="MATERIAL"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton45ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
