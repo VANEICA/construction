@@ -3,19 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package construction;
-
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author atuva
  */
 public class worker extends javax.swing.JFrame {
 
+
     /**
      * Creates new form worker
      */
     public worker() {
         initComponents();
+       
+ loadSitesToComboBox();
+
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,25 +41,26 @@ public class worker extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtname = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btninsert = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btndelete = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        btnupdate = new javax.swing.JButton();
+        btnclear = new javax.swing.JButton();
+        txtcontact = new javax.swing.JTextField();
+        txtsalary = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbgender = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbsite = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        professional = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
+        btnload = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
@@ -67,47 +81,68 @@ public class worker extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("WORKERS");
 
+        txtname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtnameActionPerformed(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Algerian", 1, 18)); // NOI18N
         jLabel1.setText("O O O");
 
-        jButton3.setText("SAVE");
+        btninsert.setText("SAVE");
+        btninsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btninsertActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Full Name");
 
-        jButton1.setText("DELETE");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btndelete.setText("DELETE");
+        btndelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btndeleteActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Contact");
 
-        jButton4.setText("UPDATE");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnupdate.setText("UPDATE");
+        btnupdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnupdateActionPerformed(evt);
             }
         });
 
-        jButton2.setText("CLEAR");
+        btnclear.setText("CLEAR");
+        btnclear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnclearActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Salary Perday");
 
         jLabel6.setText("Gender");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Gender", "Female", "Male", " " }));
+        cmbgender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Gender", "Female", "Male", " " }));
 
         jLabel9.setText("Assigned Site");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "picked from site", " ", " " }));
+        cmbsite.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "picked from site", " ", " " }));
+        cmbsite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbsiteActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("Profession");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Electrician", "Plumber", "Welder", "Painter", "Roofing Contractor", "Carpenter", "Potter(casual worker)", " " }));
+        professional.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Electrician", "Plumber", "Welder", "Painter", "Roofing Contractor", "Carpenter", "Potter(casual worker)", " " }));
 
-        jTable1.setBackground(new java.awt.Color(0, 153, 153));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(0, 153, 153));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -118,7 +153,14 @@ public class worker extends javax.swing.JFrame {
                 "Full Name", "Contact", "Gender", "Salary Perday", "Profession", "Assigned Site"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
+
+        btnload.setText("LOAD DATA");
+        btnload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnloadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,22 +169,6 @@ public class worker extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(68, 68, 68)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(75, 75, 75)
-                                .addComponent(jButton4)
-                                .addGap(78, 78, 78)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 606, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,15 +176,11 @@ public class worker extends javax.swing.JFrame {
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(70, 70, 70)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4)
-                            .addComponent(jComboBox1, 0, 198, Short.MAX_VALUE))
+                            .addComponent(txtcontact)
+                            .addComponent(txtname)
+                            .addComponent(cmbgender, 0, 198, Short.MAX_VALUE))
                         .addGap(45, 45, 45)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -166,15 +188,38 @@ public class worker extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(professional, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGap(30, 30, 30))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(19, 19, 19)))))))
+                                        .addComponent(txtsalary, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(19, 19, 19))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbsite, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnload))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 606, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(btninsert, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(68, 68, 68)
+                                .addComponent(btndelete, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(75, 75, 75)
+                                .addComponent(btnupdate)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(14, 14, 14))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 705, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnclear, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 705, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
@@ -186,9 +231,9 @@ public class worker extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtname, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtsalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(6, 6, 6)))
@@ -198,22 +243,23 @@ public class worker extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(professional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtcontact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbgender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4)
-                    .addComponent(jButton2))
+                    .addComponent(btninsert)
+                    .addComponent(btndelete)
+                    .addComponent(btnupdate)
+                    .addComponent(btnload)
+                    .addComponent(btnclear))
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -365,13 +411,168 @@ public class worker extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    int selectedRow = table.getSelectedRow();
+    if (selectedRow >= 0) {
+        int worker_id = (int) table.getValueAt(selectedRow, 0);
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "UPDATE workers SET full_name=?, contact=?, gender=?, site_id=?, profession=?, salary_per_day=? WHERE worker_id=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+
+            SiteItem selectedSite = (SiteItem) cmbsite.getSelectedItem();
+            int site_id = selectedSite.getId();
+            String name = txtname.getText();
+            String contact = txtcontact.getText();
+            String gender = cmbgender.getSelectedItem().toString();
+            String profession = professional.getSelectedItem().toString();
+            double salary = Double.parseDouble(txtsalary.getText());
+
+            
+
+            pst.setString(1, name);
+            pst.setString(2, contact);
+            pst.setString(3, gender);
+            pst.setInt(4, site_id);
+            pst.setString(5, profession);
+            pst.setDouble(6, salary);
+            pst.setInt(7, worker_id);
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Worker updated successfully");
+
+            pst.close();
+            conn.close();
+
+            loadWorkerData();
+            clearFields();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Update Error: " + e.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a row to update");
+    }
+
+
+
+ 
+
+      // TODO add your handling code here:
+    }//GEN-LAST:event_btnupdateActionPerformed
+
+private List<Integer> siteIds = new ArrayList<>();
+private List<String> siteNames = new ArrayList<>();
+
+// Method to load sites into combobox
+private void loadSitesToComboBox() {
+    try {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT site_id, site_name FROM construction_sites ORDER BY site_name";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        
+        // Clear existing data
+        cmbsite.removeAllItems();
+        siteIds.clear();
+        siteNames.clear();
+        
+        // Add default option
+
+cmbsite.addItem("-- Select Site --");
+        siteIds.add(0);
+        siteNames.add("-- Select Site --");
+        
+        // Add sites from database
+        while (rs.next()) {
+            int siteId = rs.getInt("site_id");
+            String siteName = rs.getString("site_name");
+            
+            cmbsite.addItem(siteName);  // Only add the name to combobox
+            siteIds.add(siteId);        // Store ID in parallel list
+            siteNames.add(siteName);    // Store name in parallel list
+        }
+        
+        rs.close();
+        pst.close();
+        conn.close();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading sites: " + e.getMessage());
+    }
+}
+
+// Method to get selected site ID
+private int getSelectedSiteId() {
+    int selectedIndex = cmbsite.getSelectedIndex();
+    if (selectedIndex > 0 && selectedIndex < siteIds.size()) {
+        return siteIds.get(selectedIndex);
+    }
+    return 0; // Return 0 if no valid selection
+}
+
+// Method to get selected site name
+private String getSelectedSiteName() {
+    int selectedIndex = cmbsite.getSelectedIndex();
+    if (selectedIndex > 0 && selectedIndex < siteNames.size()) {
+        return siteNames.get(selectedIndex);
+    }
+    return ""; // Return empty string if no valid selection
+}
+    private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
+ int selectedRow = table.getSelectedRow();
+    
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to delete!");
+        return;
+    }
+    
+    // Get user details from selected row
+    int userId = (int) table.getValueAt(selectedRow, 0);
+    String fullName = (String) table.getValueAt(selectedRow, 1);
+    
+    // Confirmation dialog
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to delete:\n" + fullName + "?",
+        "Confirm Delete",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE
+    );
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+    if (selectedRow >= 0) {
+        int worker_id = (int) table.getValueAt(selectedRow, 0);
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM workers WHERE worker_id = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, worker_id);
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Worker deleted successfully");
+
+            pst.close();
+            conn.close();
+
+            loadWorkerData();
+            clearFields();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Delete Error: " + e.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a row to delete");
+    }
+    }
+
+
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btndeleteActionPerformed
 
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
    new approve_material().setVisible(true); // open new form
@@ -413,6 +614,172 @@ public class worker extends javax.swing.JFrame {
     this.dispose(); // close current form (optional)        // TODO add your handling code here:
     }//GEN-LAST:event_jButton26ActionPerformed
 
+    private void txtnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnameActionPerformed
+
+    private void btnloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloadActionPerformed
+
+    loadWorkerData();
+}
+
+private void loadWorkerData() {
+    DefaultTableModel model = new DefaultTableModel(new String[]{"ID", "Name", "Contact", "Gender", "Site", "Profession", "Salary"}, 0);
+    table.setModel(model);
+
+    try {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT w.worker_id, w.full_name, w.contact, w.gender, s.site_name, w.profession, w.salary_per_day FROM workers w JOIN construction_sites s ON w.site_id = s.site_id";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("worker_id"),
+                rs.getString("full_name"),
+                rs.getString("contact"),
+                rs.getString("gender"),
+                rs.getString("site_name"),
+                rs.getString("profession"),
+                rs.getDouble("salary_per_day")
+            });
+        }
+
+        rs.close();
+        pst.close();
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Load Error: " + e.getMessage());
+    }
+
+ 
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnloadActionPerformed
+private void initializeForm() {
+    loadSitesToComboBox(); // Load sites when form opens
+}
+    private void btninsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btninsertActionPerformed
+
+   try {
+        // Get selected site ID and name
+        int site_id = getSelectedSiteId();
+        String siteName = getSelectedSiteName();
+        
+        // Validate site selection
+        if (site_id == 0) {
+            JOptionPane.showMessageDialog(this, "Please select a site");
+            return;
+        }
+        
+        String name = txtname.getText().trim();
+        String contact = txtcontact.getText().trim();
+        String gender = cmbgender.getSelectedItem().toString();
+        String profession = professional.getSelectedItem().toString();
+        String salaryText = txtsalary.getText().trim();
+        
+        // Validate other inputs
+        if (name.isEmpty() || contact.isEmpty() || salaryText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all required fields");
+            return;
+        }
+        
+        double salary;
+        try {
+            salary = Double.parseDouble(salaryText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid salary amount");
+            return;
+        }
+        
+        // Insert into database
+        Connection conn = DBConnection.getConnection();
+        String sql = "INSERT INTO workers(full_name, contact, gender, site_id, profession, salary_per_day) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        
+        pst.setString(1, name);
+        pst.setString(2, contact);
+        pst.setString(3, gender);
+        pst.setInt(4, site_id);
+        pst.setString(5, profession);
+        pst.setDouble(6, salary);
+        
+        int rowsAffected = pst.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(this, "Worker assigned to " + siteName + " successfully!");
+            loadWorkerData(); // Refresh table
+            clearFields(); // Clear input fields
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to insert worker");
+        }
+        
+        pst.close();
+        conn.close();
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Insert Error: " + e.getMessage());
+    }
+
+
+
+      // TODO add your handling code here:
+    }//GEN-LAST:event_btninsertActionPerformed
+private void tableMouseClicked(java.awt.event.MouseEvent evt) {
+    int selectedRow = table.getSelectedRow();
+
+    txtname.setText(table.getValueAt(selectedRow, 1).toString());
+   txtcontact.setText(table.getValueAt(selectedRow, 2).toString());
+    cmbgender.setSelectedItem(table.getValueAt(selectedRow, 3).toString());
+    cmbsite.setSelectedItem(new SiteItem(0, table.getValueAt(selectedRow, 4).toString())); // Match by name
+    professional.setSelectedItem(table.getValueAt(selectedRow, 5).toString());
+    txtsalary.setText(table.getValueAt(selectedRow, 6).toString());
+}
+
+    private void cmbsiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbsiteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbsiteActionPerformed
+
+    private void btnclearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclearActionPerformed
+ 
+    clearFields();
+}
+
+private void clearFields() {
+    txtname.setText("");
+    txtcontact.setText("");
+    txtsalary.setText("");
+    cmbgender.setSelectedIndex(0);
+    professional.setSelectedIndex(0);
+    cmbsite.setSelectedIndex(0);
+
+       // TODO add your handling code here:
+    }//GEN-LAST:event_btnclearActionPerformed
+class SiteItem {
+    private int id;
+    private String name;
+    
+    public SiteItem(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public String toString() {
+        return name; // This will be displayed in the combobox
+    }
+}
+
+
     /**
      * @param args the command line arguments
      */
@@ -449,9 +816,14 @@ public class worker extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnclear;
+    private javax.swing.JButton btndelete;
+    private javax.swing.JButton btninsert;
+    private javax.swing.JButton btnload;
+    private javax.swing.JButton btnupdate;
+    private javax.swing.JComboBox<String> cmbgender;
+    private javax.swing.JComboBox<String> cmbsite;
     private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton23;
@@ -459,11 +831,6 @@ public class worker extends javax.swing.JFrame {
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
@@ -478,9 +845,10 @@ public class worker extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JComboBox<String> professional;
+    private javax.swing.JTable table;
+    private javax.swing.JTextField txtcontact;
+    private javax.swing.JTextField txtname;
+    private javax.swing.JTextField txtsalary;
     // End of variables declaration//GEN-END:variables
 }

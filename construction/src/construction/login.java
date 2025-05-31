@@ -40,6 +40,7 @@ public class login extends javax.swing.JFrame {
         txtUsername = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(0, 0));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("ASPIRE CONSTRUCTIONS");
@@ -47,7 +48,7 @@ public class login extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("LOGIN");
 
-        cbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Role", "Manager", "Site Manager", " " }));
+        cbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Role", "Manager", "SiteManager", " " }));
 
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -62,7 +63,7 @@ public class login extends javax.swing.JFrame {
 
         jLabel4.setText("Enter Username");
 
-        jLabel5.setText("Enter Password");
+        jLabel5.setText("Enter Username");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,10 +156,11 @@ try {
         JOptionPane.showMessageDialog(this, "Login successful as " + role);
 
         if (role.equals("Manager")) {
-            new Manager().setVisible(true);
+            new Manager(username).setVisible(true);
         } else if (role.equals("SiteManager")) {
            
-            new site_manager().setVisible(true);
+            new site().setVisible(true);
+            
         }
 
         this.dispose(); // close login window

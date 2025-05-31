@@ -3,19 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package construction;
-
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
 /**
  *
  * @author atuva
  */
-public class site_manager extends javax.swing.JFrame {
+public final class site_manager extends javax.swing.JFrame {
 
     /**
      * Creates new form TASKS
      */
     public site_manager() {
         initComponents();
+      
+
+        loadSitesIntoComboBox();  // Already exists
+loadSiteManagersToTable(); // New one to load all SiteManagers into the table
+
     }
+
+
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,17 +45,19 @@ public class site_manager extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        fname = new javax.swing.JTextField();
+        upassword = new javax.swing.JPasswordField();
+        assignsite = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        save = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
+        role = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        uname = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
@@ -65,29 +80,36 @@ public class site_manager extends javax.swing.JFrame {
 
         jLabel3.setText("Username");
 
-        jLabel4.setText("Password");
+        jLabel4.setText("Full Name");
 
-        jLabel5.setText("Confirm Password");
+        jLabel5.setText("Password");
 
         jLabel6.setText("Assigned Site");
 
-        jPasswordField1.setText("jPasswordField1");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select site", "namanve complex", "Parking floor TIpati", "Slau ict Building" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        assignsite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                assignsiteActionPerformed(evt);
             }
         });
 
         jButton1.setText("DELETE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("CLEAR");
-
-        jButton3.setText("SAVE");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        save.setText("SAVE");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
             }
         });
 
@@ -101,27 +123,36 @@ public class site_manager extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Algerian", 1, 18)); // NOI18N
         jLabel1.setText("O O O");
 
-        jTable1.setBackground(new java.awt.Color(0, 153, 153));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(0, 153, 153));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Username", "Password", "Confirm Password", "Assigned Site"
+                "Username", "Full Name", " Password", "Role", "Role"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
+
+        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select site", "Manager", "SiteManager" }));
+        role.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                roleActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Role");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -132,36 +163,44 @@ public class site_manager extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(221, 221, 221)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addGap(86, 86, 86)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jPasswordField1)
-                                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPasswordField2)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel6))
+                                        .addGap(86, 86, 86)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(upassword)
+                                                .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(role, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(assignsite, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(uname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(221, 221, 221)
+                                .addComponent(jButton4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(125, 125, 125)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,30 +211,34 @@ public class site_manager extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(uname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(upassword, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(assignsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(save)
+                        .addComponent(jButton1))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton4)
                         .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(109, 109, 109))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(0, 153, 153));
@@ -330,28 +373,218 @@ public class site_manager extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 53, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+int selectedRow = table.getSelectedRow();
+    
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to update!");
+        return;
+    }
+    
+    // Get user details from selected row
+    int userId = (int) table.getValueAt(selectedRow, 0);
+    String fullName = (String) table.getValueAt(selectedRow, 1);
+    String username = (String) table.getValueAt(selectedRow, 2);
+    String siteName = (String) table.getValueAt(selectedRow, 4);
+    
+    // Confirmation dialog
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Do you want to update:\n" + fullName + "?",
+        "Confirm Update",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE
+    );
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            // Get full user details from database
+            Connection conn = DBConnection.getConnection();
+            String sql = "SELECT u.*, s.site_name FROM users u " +
+                        "JOIN construction_sites s ON u.assigned_site = s.site_id " +
+                        "WHERE u.user_id = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, userId);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                // Fill the form fields
+                fname.setText(rs.getString("full_name"));
+                uname.setText(rs.getString("username"));
+                upassword.setText(rs.getString("password"));
+                
+                // Set the correct site in combo box
+                int siteId = rs.getInt("assigned_site");
+                for (int i = 0; i < assignsite.getItemCount(); i++) {
+                    SiteItem item = (SiteItem) assignsite.getItemAt(i);
+                    if (item.getSiteId() == siteId) {
+                        assignsite.setSelectedIndex(i);
+                        break;
+                    }
+                }
+                
+                // Store the user ID for updating
+                this.currentUserId = userId; // You'll need to add this field to your class
+                
+                JOptionPane.showMessageDialog(this, "User details loaded. Make changes and click Save to update.");
+            }
+            
+            rs.close();
+            pst.close();
+            conn.close();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading user details: " + ex.getMessage());
+        }
+    }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void assignsiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignsiteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_assignsiteActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+private void clearFields() {
+    fname.setText("");
+    uname.setText("");
+    upassword.setText("");
+    assignsite.setSelectedIndex(-1); // Clear combo box selection
+    currentUserId = -1; // Reset update mode
+    table.clearSelection(); // Clear table selection
+}
 
+// 6. TABLE CLICK HANDLER - Optional: Load data when clicking table row
+private void tableMouseClicked(java.awt.event.MouseEvent evt) {
+    // This is optional - auto-fill form when clicking a row
+    if (evt.getClickCount() == 2) { // Double click
+        jButton4();
+    }
+}
+private int currentUserId = -1; // Add this field to your class
+
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+
+   try {
+        // Get values from form fields
+        String fullName = fname.getText().trim();
+        String username = uname.getText().trim();
+        String password = upassword.getText().trim();
+        SiteItem selectedSite = (SiteItem) assignsite.getSelectedItem();
+        
+        // Validation
+        if (fullName.isEmpty() || username.isEmpty() || password.isEmpty() || selectedSite == null) {
+            JOptionPane.showMessageDialog(this, "Please fill all fields!");
+            return;
+        }
+        
+        Connection conn = DBConnection.getConnection();
+        String sql;
+        PreparedStatement pst;
+        
+        if (currentUserId == -1) {
+            // INSERT new user
+            sql = "INSERT INTO users (full_name, username, password, role, assigned_site) VALUES (?, ?, ?, 'SiteManager', ?)";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, fullName);
+            pst.setString(2, username);
+            pst.setString(3, password);
+            pst.setInt(4, selectedSite.getSiteId());
+        } else {
+            // UPDATE existing user
+            sql = "UPDATE users SET full_name = ?, username = ?, password = ?, assigned_site = ? WHERE user_id = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, fullName);
+            pst.setString(2, username);
+            pst.setString(3, password);
+            pst.setInt(4, selectedSite.getSiteId());
+            pst.setInt(5, currentUserId);
+        }
+        
+        int result = pst.executeUpdate();
+        
+        if (result > 0) {
+            String message = (currentUserId == -1) ? "Site Manager saved successfully!" : "Site Manager updated successfully!";
+            JOptionPane.showMessageDialog(this, message);
+            clearFields();
+            loadSiteManagersToTable(); // Refresh table
+            currentUserId = -1; // Reset for next operation
+        }
+        
+        pst.close();
+        conn.close();
+        
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error saving: " + ex.getMessage());
+    }
+
+       // TODO add your handling code here:
+    }//GEN-LAST:event_saveActionPerformed
+ private void loadSiteManagersToTable() {
+    
+DefaultTableModel model = new DefaultTableModel(
+    new String[]{"User ID", "Full Name", "Username", "Role", "Site Name"}, 0
+);
+table.setModel(model);
+
+    try {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT u.user_id, u.full_name, u.username, u.role, s.site_name " +
+                     "FROM users u JOIN construction_sites s ON u.assigned_site = s.site_id " +
+                     "WHERE u.role = 'SiteManager'";
+
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int userId = rs.getInt("user_id");
+            String fullName = rs.getString("full_name");
+            String username = rs.getString("username");
+            String role = rs.getString("role");
+            String siteName = rs.getString("site_name");
+
+            model.addRow(new Object[]{userId, fullName, username, role, siteName});
+        }
+
+        rs.close();
+        pst.close();
+        conn.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading table: " + ex.getMessage());
+    }
+}
+private void loadSitesIntoComboBox() {
+    try {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT site_id, site_name FROM construction_sites";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        assignsite.removeAllItems(); // Clear previous
+        while (rs.next()) {
+            assignsite.addItem(new SiteItem(rs.getInt("site_id"), rs.getString("site_name")));
+        }
+
+        rs.close();
+        pst.close();
+        conn.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading sites: " + ex.getMessage());
+    }
+}
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
    new approve_material().setVisible(true); // open new form
     this.dispose(); // close current form (optional)       // TODO add your handling code here:
@@ -392,6 +625,68 @@ public class site_manager extends javax.swing.JFrame {
     this.dispose(); // close current form (optional)        // TODO add your handling code here:
     }//GEN-LAST:event_jButton26ActionPerformed
 
+    private void roleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_roleActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+ int selectedRow = table.getSelectedRow();
+    
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a user to delete!");
+        return;
+    }
+    
+    // Get user details from selected row
+    int userId = (int) table.getValueAt(selectedRow, 0);
+    String fullName = (String) table.getValueAt(selectedRow, 1);
+    
+    // Confirmation dialog
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to delete:\n" + fullName + "?",
+        "Confirm Delete",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE
+    );
+    
+    if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "DELETE FROM users WHERE user_id = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, userId);
+            
+            int result = pst.executeUpdate();
+            
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this, "User deleted successfully!");
+                loadSiteManagersToTable(); // Refresh table
+                clearFields(); // Clear form
+            }
+            
+            pst.close();
+            conn.close();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error deleting: " + ex.getMessage());
+        }
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+fname.setText("");
+    uname.setText("");
+    upassword.setText("");
+    assignsite.setSelectedIndex(-1); // Clear combo box selection
+    currentUserId = -1; // Reset update mode
+    table.clearSelection(); // Clear table selection        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+   
+
+
     /**
      * @param args the command line arguments
      */
@@ -429,6 +724,8 @@ public class site_manager extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<SiteItem> assignsite;
+    private javax.swing.JTextField fname;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
@@ -439,9 +736,7 @@ public class site_manager extends javax.swing.JFrame {
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -451,12 +746,18 @@ public class site_manager extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<String> role;
+    private javax.swing.JButton save;
+    private javax.swing.JTable table;
+    private javax.swing.JTextField uname;
+    private javax.swing.JPasswordField upassword;
     // End of variables declaration//GEN-END:variables
+
+    private void jButton4() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

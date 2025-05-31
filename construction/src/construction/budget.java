@@ -3,20 +3,87 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package construction;
-
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /**
  *
  * @author atuva
  */
+
 public class budget extends javax.swing.JFrame {
+private JPopupMenu suggestionPopup = new JPopupMenu();
+
 
     /**
      * Creates new form budget
      */
     public budget() {
         initComponents();
-    }
+        search.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                monitorBudget();
+                showSuggestions();
+            }
 
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                monitorBudget();
+                showSuggestions();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                monitorBudget();
+                showSuggestions();
+            }
+        });
+    }
+private void showSuggestions() {
+        String text = search.getText().trim();
+        suggestionPopup.setVisible(false);
+
+        if (text.isEmpty()) return;
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "SELECT site_name FROM construction_sites WHERE site_name LIKE ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "%" + text + "%");
+
+            ResultSet rs = pst.executeQuery();
+            suggestionPopup.removeAll();
+
+            boolean found = false;
+            while (rs.next()) {
+                found = true;
+                String suggestion = rs.getString("site_name");
+                JMenuItem item = new JMenuItem(suggestion);
+                item.addActionListener(e -> {
+                    search.setText(suggestion);
+                    suggestionPopup.setVisible(false);
+                    monitorBudget();
+                });
+                suggestionPopup.add(item);
+            }
+
+            if (found) {
+                suggestionPopup.show(search, 0, search.getHeight());
+            }
+
+            rs.close();
+            pst.close();
+            conn.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,15 +95,15 @@ public class budget extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        budget = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        balance2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        balance = new javax.swing.JTextField();
+        salaries = new javax.swing.JTextField();
+        expenses = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        search = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jButton37 = new javax.swing.JButton();
         jButton38 = new javax.swing.JButton();
@@ -63,14 +130,20 @@ public class budget extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jLabel3.setText("Paid Salaries");
 
-        jLabel4.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jLabel4.setText("Remaining Amount");
+        balance2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        balance2.setText("Remaining Amount");
 
         jLabel5.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jLabel5.setText("Material Expenses");
 
         jLabel6.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jLabel6.setText("Select Project");
+
+        search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchActionPerformed(evt);
+            }
+        });
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -211,15 +284,15 @@ public class budget extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(balance2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(104, 104, 104)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(budget, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(expenses, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(salaries, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(search, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(balance, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -233,29 +306,29 @@ public class budget extends javax.swing.JFrame {
                 .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(budget, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(expenses, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(salaries, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(balance2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(balance, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -303,6 +376,72 @@ public class budget extends javax.swing.JFrame {
     this.dispose(); // close current form (optional)      // TODO add your handling code here:
     }//GEN-LAST:event_jButton44ActionPerformed
 
+    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchActionPerformed
+public void monitorBudget() {
+    String site_name = search.getText().trim();
+
+    if (site_name.isEmpty()) {
+        // Clear all fields if nothing typed
+        budget.setText("");
+        expenses.setText("");
+        salaries.setText("");
+        balance.setText("");
+        return;
+    }
+
+    try {
+        Connection conn = DBConnection.getConnection();
+
+        String sql = "SELECT " +
+                     "cs.budget, " +
+                     "COALESCE(SUM(DISTINCT m.total_cost), 0) AS expenses, " +
+                     "COALESCE(SUM(DISTINCT p.total_amount), 0) AS salaries, " +
+                     "(cs.budget - (COALESCE(SUM(DISTINCT m.total_cost), 0) + COALESCE(SUM(DISTINCT p.total_amount), 0))) AS balance " +
+                     "FROM construction_sites cs " +
+                     "LEFT JOIN material_requests m ON m.site_id = cs.site_id AND m.approved_by IS NOT NULL " +
+                     "LEFT JOIN workers w ON w.site_id = cs.site_id " +
+                     "LEFT JOIN worker_payments p ON p.worker_id = w.worker_id " +
+                     "WHERE cs.site_name LIKE ? " +
+                     "GROUP BY cs.site_id";
+
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1, "%" + site_name + "%");
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            double budgetValue = rs.getDouble("budget");
+            double expensesValue = rs.getDouble("expenses");
+            double salariesValue = rs.getDouble("salaries");
+            double balanceValue = rs.getDouble("balance");
+
+            budget.setText(String.format("%.2f", budgetValue));
+            expenses.setText(String.format("%.2f", expensesValue));
+            salaries.setText(String.format("%.2f", salariesValue));
+            balance.setText(String.format("%.2f", balanceValue));
+        } else {
+            // Clear if no match
+            budget.setText("");
+            expenses.setText("");
+            salaries.setText("");
+            balance.setText("");
+        }
+
+        rs.close();
+        pst.close();
+        conn.close();
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error fetching budget data: " + ex.getMessage());
+    }
+}
+
+
     /**
      * @param args the command line arguments
      */
@@ -339,6 +478,10 @@ public class budget extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField balance;
+    private javax.swing.JLabel balance2;
+    private javax.swing.JTextField budget;
+    private javax.swing.JTextField expenses;
     private javax.swing.JButton jButton37;
     private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
@@ -353,14 +496,10 @@ public class budget extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField salaries;
+    private javax.swing.JTextField search;
     // End of variables declaration//GEN-END:variables
 }

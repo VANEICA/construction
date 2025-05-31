@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package construction;
+import javax.swing.*;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+
 
 /**
  *
@@ -30,19 +36,19 @@ public class project extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        cname = new javax.swing.JTextField();
+        save = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        clear = new javax.swing.JButton();
+        location = new javax.swing.JTextField();
+        sname = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        edate = new javax.swing.JTextField();
+        sdate = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jButton37 = new javax.swing.JButton();
         jButton38 = new javax.swing.JButton();
@@ -56,6 +62,9 @@ public class project extends javax.swing.JFrame {
         jButton43 = new javax.swing.JButton();
         jButton44 = new javax.swing.JButton();
         jButton45 = new javax.swing.JButton();
+        budget = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        load = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,13 +75,23 @@ public class project extends javax.swing.JFrame {
 
         jLabel3.setText("Start Date");
 
-        jLabel4.setText("Location");
+        jLabel4.setText("Site Name");
 
-        jLabel5.setText("Estimated Budget");
+        jLabel5.setText("Location");
 
-        jButton3.setText("SAVE");
+        save.setText("SAVE");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("DELETE");
+        delete.setText("DELETE");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("UPDATE");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -81,25 +100,38 @@ public class project extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("CLEAR");
+        clear.setText("CLEAR");
+        clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearActionPerformed(evt);
+            }
+        });
 
-        jLabel7.setText("Site Name");
+        jLabel7.setText("ClientName");
 
         jLabel8.setText("End Date");
 
-        jTable1.setBackground(new java.awt.Color(0, 153, 153));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setBackground(new java.awt.Color(0, 153, 153));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Site Name", "Location", "Estimated Budget", "Strat Date", "End Date"
+                "Client Name", "Site Name", "Location", "Strat Date", "End Date", "Budget"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Float.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(table);
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -229,6 +261,15 @@ public class project extends javax.swing.JFrame {
                 .addGap(49, 49, 49))
         );
 
+        jLabel6.setText("Estimated Budget");
+
+        load.setText("Load Data");
+        load.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -249,34 +290,45 @@ public class project extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31))
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(save, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(44, 44, 44)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(47, 47, 47)
+                                    .addComponent(location, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sname, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTextField5)
+                                        .addGap(44, 44, 44)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(47, 47, 47))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel6)
+                                        .addGap(26, 26, 26)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(budget)
                                         .addContainerGap())
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jTextField4)
+                                        .addComponent(sdate)
+                                        .addContainerGap())
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(edate, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
                                         .addGap(7, 7, 7))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(72, 72, 72)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(81, 81, 81)
                                 .addComponent(jButton4)
-                                .addGap(117, 117, 117)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(173, 173, 173))))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(load, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(84, 84, 84)
+                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,25 +338,30 @@ public class project extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(budget, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(location, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton1)
+                    .addComponent(save)
+                    .addComponent(delete)
                     .addComponent(jButton4)
-                    .addComponent(jButton2))
+                    .addComponent(clear)
+                    .addComponent(load))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(32, Short.MAX_VALUE))
@@ -315,7 +372,44 @@ public class project extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+ jButton4.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Please select a record to update.");
+            return;
+        }
+
+        int siteId = (int) table.getValueAt(row, 0); // Assuming first column is ID
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "UPDATE construction_sites SET site_name = ?, client_name = ?, location = ?, start_date = ?, end_date = ?, budget = ? WHERE site_id = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+
+            pst.setString(1, cname.getText());
+            pst.setString(2, sname.getText());
+            pst.setString(3, location.getText());
+            pst.setString(4, sdate.getText()); // or convert to SQL date if needed
+            pst.setString(5, edate.getText());
+            pst.setDouble(6, Double.parseDouble(budget.getText()));
+            pst.setInt(7, siteId);
+
+            int updated = pst.executeUpdate();
+            if (updated > 0) {
+                JOptionPane.showMessageDialog(null, "Record updated successfully!");
+                loadTable(); // Refresh table
+            }
+
+            pst.close();
+            conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Update Error: " + ex.getMessage());
+        }
+    }
+});
+       // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton38ActionPerformed
@@ -358,6 +452,205 @@ public class project extends javax.swing.JFrame {
     this.dispose(); // close current form (optional)        // TODO add your handling code here:
     }//GEN-LAST:event_jButton44ActionPerformed
 
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+    save.addActionListener(new ActionListener() {
+    boolean saving = false; // prevent multiple concurrent saves
+
+    public void actionPerformed(ActionEvent e) {
+        if (saving) return; // ignore if already saving
+        saving = true;
+
+        try {
+            Connection conn = DBConnection.getConnection();
+
+            String sql = "INSERT INTO construction_sites (client_name, site_name, location, start_date, end_date, budget) " +
+                         "VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
+
+            String startDateText = sdate.getText().trim();
+            String endDateText = edate.getText().trim();
+            String pattern = "\\d{4}-\\d{2}-\\d{2}";
+
+            if (!startDateText.matches(pattern) || !endDateText.matches(pattern)) {
+                JOptionPane.showMessageDialog(null, "Please enter dates in yyyy-MM-dd format.");
+                saving = false;
+                return;
+            }
+
+            pst.setString(1, cname.getText());
+            pst.setString(2, sname.getText());
+            pst.setString(3, location.getText());
+            pst.setString(4, startDateText);
+            pst.setString(5, endDateText);
+            pst.setDouble(6, Double.parseDouble(budget.getText()));
+
+            int inserted = pst.executeUpdate();
+            if (inserted > 0) {
+                JOptionPane.showMessageDialog(null, "Site saved successfully!");
+                loadTable();
+            }
+
+            pst.close();
+            conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+        } finally {
+            saving = false; // allow saving again
+        }
+    }
+});
+
+  // TODO add your handling code here:
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+  clear.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        cname.setText("");
+        sname.setText("");
+        location.setText("");
+        sdate.setText("");
+        edate.setText("");
+        budget.setText("");
+    }
+});
+      // TODO add your handling code here:
+    }//GEN-LAST:event_clearActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+ delete.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Please select a record to delete.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int siteId = (int) table.getValueAt(row, 0); // Assuming first column is ID
+
+            try {
+                Connection conn = DBConnection.getConnection();
+                String sql = "DELETE FROM construction_sites WHERE site_id = ?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, siteId);
+                int deleted = pst.executeUpdate();
+
+                if (deleted > 0) {
+                    JOptionPane.showMessageDialog(null, "Record deleted successfully.");
+                    loadTable(); // Refresh the table
+                }
+
+                pst.close();
+                conn.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Delete Error: " + ex.getMessage());
+            }
+        }
+    }
+});
+       // TODO add your handling code here:
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void loadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadActionPerformed
+  load.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "SELECT site_id, client_name, site_name,location, start_date, end_date, budget FROM construction_sites";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            DefaultTableModel model = new DefaultTableModel();
+            model.addColumn("SITE ID");
+            model.addColumn("CLIENT Name");
+            model.addColumn("SITE NAME");
+            model.addColumn("LOCATION");
+            model.addColumn("Start Date");
+            model.addColumn("End Date");
+            model.addColumn("BUDGET");
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("site_id"),
+                    rs.getString("client_name"),
+                    rs.getString("site_name"),
+                    rs.getString("location"),
+                    rs.getDate("start_date"),
+                    rs.getDate("end_date"),
+                    rs.getString("budget")
+                });
+            }
+
+            table.setModel(model); // Set data to your JTable
+            rs.close();
+            pst.close();
+            conn.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error loading tasks: " + ex.getMessage());
+        }
+    }
+});
+      // TODO add your handling code here:
+    }//GEN-LAST:event_loadActionPerformed
+public void loadTable() {
+    try {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT site_id, site_name, client_name, location, start_date, end_date, budget FROM construction_sites";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Site Name");
+        model.addColumn("Client");
+        model.addColumn("Location");
+        model.addColumn("Start Date");
+        model.addColumn("End Date");
+        model.addColumn("Budget");
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("site_id"),
+                rs.getString("site_name"),
+                rs.getString("client_name"),
+                rs.getString("location"),
+                rs.getDate("start_date"),
+                rs.getDate("end_date"),
+                rs.getDouble("budget")
+            });
+        }
+
+        table.setModel(model);
+        rs.close();
+        pst.close();
+        conn.close();
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Load Error: " + ex.getMessage());
+    }
+    table.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = table.getSelectedRow();
+        if (row >= 0) {
+            cname.setText(table.getValueAt(row, 1).toString());
+            sname.setText(table.getValueAt(row, 2).toString());
+            location.setText(table.getValueAt(row, 3).toString());
+            sdate.setText(table.getValueAt(row, 4).toString());
+            edate.setText(table.getValueAt(row, 5).toString());
+            budget.setText(table.getValueAt(row, 6).toString());
+        }
+    }
+});
+
+}
+
     /**
      * @param args the command line arguments
      */
@@ -386,17 +679,15 @@ public class project extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new project().setVisible(true);
-            }
-        });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField budget;
+    private javax.swing.JButton clear;
+    private javax.swing.JTextField cname;
+    private javax.swing.JButton delete;
+    private javax.swing.JTextField edate;
     private javax.swing.JButton jButton37;
     private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
@@ -414,15 +705,16 @@ public class project extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton load;
+    private javax.swing.JTextField location;
+    private javax.swing.JButton save;
+    private javax.swing.JTextField sdate;
+    private javax.swing.JTextField sname;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
